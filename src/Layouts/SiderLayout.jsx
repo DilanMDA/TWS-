@@ -1,12 +1,9 @@
 import {
-    DesktopOutlined,
-    FileOutlined,
-    PieChartOutlined,
-    TeamOutlined,
-    UserOutlined,
+    TeamOutlined,    
   } from '@ant-design/icons';
-  import { Breadcrumb, Layout, Menu } from 'antd';
-  import React, { useState } from 'react';
+  import {Layout, Menu } from 'antd';
+  import React from 'react';
+  import {Link} from 'react-router-dom';
 
   const { Header, Content, Footer, Sider } = Layout;
   
@@ -20,28 +17,22 @@ import {
   }
   
   const items = [
-    getItem('Option 1', '1', <PieChartOutlined />),
-    getItem('Option 2', '2', <DesktopOutlined />),
-    getItem('User', 'sub1', <UserOutlined />, [
-      getItem('Tom', '3'),
-      getItem('Bill', '4'),
-      getItem('Alex', '5'),
-    ]),
-    getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-    getItem('Files', '9', <FileOutlined />),
+    {label:<Link to="/manager/projects">Projects</Link>,key:'0'},
+    {label:<Link to="/manager/tasks">Tasks</Link>,key:'1'},
+    {label:<Link to="/manager/teams">Teams</Link>,key:'2',icon:<TeamOutlined />},
+    {label:'TimeSheets',key:'3'},    
   ];
   
-  const SiderLayout = () => {
-    const [collapsed, setCollapsed] = useState(false);
+  const SiderLayout = (ContentDiv) => ({...props}) =>{
     return (
       <Layout
         style={{
           minHeight: '100vh',
         }}
       >
-        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-          <div className="logo" />
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <Sider collapsible collapsed={false} onCollapse={(value) => console.log('test')}>
+        <img src="https://logomaker-assets.s3.amazonaws.com/sites/all/themes/logomaker/images/2021-LogoMaker-Site-Logo.png" alt="LogoMaker Logo" class="align-4 max-width-100 " width="190" height="60"/>
+          <Menu theme="dark" defaultSelectedKeys={['0']} mode="inline" items={items} />
         </Sider>
         <Layout className="site-layout">
           <Header
@@ -54,24 +45,8 @@ import {
             style={{
               margin: '0 16px',
             }}
-          >
-            <Breadcrumb
-              style={{
-                margin: '16px 0',
-              }}
-            >
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div
-              className="site-layout-background"
-              style={{
-                padding: 24,
-                minHeight: 360,
-              }}
-            >
-              Bill is a cat.
-            </div>
+          >        
+            <ContentDiv {...props}/>
           </Content>
           <Footer
             style={{
