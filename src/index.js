@@ -7,6 +7,11 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import { UserViewRoute, TasksViewRoute, ProjectViewRoute } from './Layouts/LayoutConstant';
 import PageNotFound from './Components/Error/PageNotFound';
+import SiderLayout from './Layouts/SiderLayout';
+import UserView from './Components/UserView';
+import ProjectView from './Components/ProjectView';
+import TaskView from './Components/TaskView';
+import Register from './Components/Register/Register';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -14,7 +19,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<App/>}></Route>      
+      <Route path="/" element={<Register/>}></Route>
+      <Route path="/sider" element={<SiderLayout/>}></Route>
       <Route path="admin">
         <Route path="users" element={<UserViewRoute/>}></Route>
       </Route>
