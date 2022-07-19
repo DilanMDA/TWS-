@@ -12,6 +12,7 @@ import UserView from './Components/UserView';
 import ProjectView from './Components/ProjectView';
 import TaskView from './Components/TaskView';
 import Register from './Components/Register/Register';
+import KanbanBoard from './Components/Kanban';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -32,6 +33,7 @@ root.render(
         <Route path="projects" element={<ProjectViewRoute/>}></Route>
         <Route path="tasks" element={<TasksViewRoute/>}></Route>
       </Route>
+      <Route path="taskSheet" element={<KanbanBoard/>}></Route>
       <Route
       path="*"
       element={
