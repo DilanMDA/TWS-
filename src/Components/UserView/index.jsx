@@ -1,9 +1,7 @@
-import React from 'react';
+import React from "react";
 
-const UserView = ()=>{
-    return(<h1>
-        Users
-    </h1>)
-}
+const UserView = () => {
+  return <div>Users</div>;
+};
 
 export default UserView;
