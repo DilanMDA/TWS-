@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState } from 'react';
 import { Input, DatePicker, Space, Table, Button, Modal, Dropdown, Menu, Tag } from 'antd';
 import CreateProjectModal from './CreateProjectModal';
+import ViewProjectModal from './ViewProjectInfo';
 const { RangePicker } = DatePicker;
 
 
@@ -35,7 +36,7 @@ const columns = [
     },
     {
         title: 'Actions',
-        render: () => (<Button>Add Tasks</Button>)
+        render: () => (<Button>View Project</Button>)
     }
   ];
   const data = [
@@ -88,11 +89,12 @@ const ProjectView = ()=>{
     }
     
     return(
-        <div>
+        <div style={{display:"grid", gap:'50px'}}>
             <div style={{display:"grid",justifyContent:"end"}}>
                 <Button onClick={showModal}>Create New Project</Button>
             </div>
             <CreateProjectModal modalVisibility={isModalVisible} handleOK={handleOk} handleCancel={handleCancel}/>
+            <ViewProjectModal modalVisibility={isModalVisible} handleOK={handleOk} handleCancel={handleCancel}/>
             <Table columns={columns} dataSource={data} onChange={onChange} />
             
         </div>

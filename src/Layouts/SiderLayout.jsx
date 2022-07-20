@@ -43,7 +43,7 @@ import {
           />
           <Content
             style={{
-              margin: '0 16px',
+              margin: '10px 16px',
             }}
           >        
             <ContentDiv {...props}/>
