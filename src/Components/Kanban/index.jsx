@@ -5,7 +5,7 @@ const data = {
     lanes: [
       {
         id: 'lane1',
-        title: 'Planned Tasks',
+        title: 'To-Do',
         label: '2/2',
         cards: [
           {id: 'Card1', title: 'Write Blog', description: 'Can AI make memes', label: '30 mins', draggable: false},
@@ -14,16 +14,28 @@ const data = {
       },
       {
         id: 'lane2',
-        title: 'Completed',
+        title: 'InProgress',
+        label: '0/0',
+        cards: []
+      },
+      {
+        id: 'lane3',
+        title: 'In Review',
+        label: '0/0',
+        cards: []
+      },
+      {
+        id: 'lane3',
+        title: 'On Hold',
         label: '0/0',
         cards: []
       }
-    ]
+    ]        
   }
 
 const KanbanBoard = () =>{
   
-    return <Board data={data} />
+    return <Board data={data} editable={true} style={{backgroundColor: 'white'}}/>
   
 }
 
