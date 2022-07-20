@@ -1,176 +1,165 @@
 import React, { useState } from "react";
 import "antd/dist/antd.css";
 import "./index.css";
-import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
+import {
+  Form,
+  Button,
+  Modal,
+  Input,
+  InputNumber,
+  Popconfirm,
+  Table,
+  Typography,
+  Space,
+} from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
-const originData = [];
-
-for (let i = 0; i < 100; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `Edrward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`,
-  });
-}
-
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}>
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
-
-const App = () => {
-  const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
-  const [editingKey, setEditingKey] = useState("");
-
-  const isEditing = (record) => record.key === editingKey;
-
-  const edit = (record) => {
-    form.setFieldsValue({
-      name: "",
-      age: "",
-      address: "",
-      ...record,
-    });
-    setEditingKey(record.key);
-  };
-
-  const cancel = () => {
-    setEditingKey("");
-  };
-
-  const save = async (key) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
-
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setData(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey("");
-      }
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
-    }
-  };
-
+const AdminView = () => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingEmployee, setEditingEmployee] = useState(null);
+  const [dataSource, setDataSource] = useState([
+    {
+      id: 1,
+      name: "Kevin",
+      address: "kevin address",
+      email: "kevin@gmail.com",
+    },
+    {
+      id: 2,
+      name: "akila",
+      address: "akila address",
+      email: "akila@gmail.com",
+    },
+    {
+      id: 3,
+      name: "dilan",
+      address: "dilan address",
+      email: "dilan@gmail.com",
+    },
+    {
+      id: 4,
+      name: "Udara",
+      address: "udara address",
+      email: "udara@gmail.com",
+    },
+  ]);
   const columns = [
+    { key: "1", title: "ID", dataIndex: "id" },
+    { key: "2", title: "Name", dataIndex: "name" },
+    { key: "3", title: "Address", dataIndex: "address" },
+    { key: "4", title: "Email", dataIndex: "email" },
     {
-      title: "name",
-      dataIndex: "name",
-      width: "25%",
-      editable: true,
-    },
-    {
-      title: "age",
-      dataIndex: "age",
-      width: "15%",
-      editable: true,
-    },
-    {
-      title: "address",
-      dataIndex: "address",
-      width: "40%",
-      editable: true,
-    },
-    {
-      title: "operation",
-      dataIndex: "operation",
-      render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link
-              onClick={() => save(record.key)}
-              style={{
-                marginRight: 8,
-              }}>
-              Save
-            </Typography.Link>
-            <Popconfirm title='Sure to cancel?' onConfirm={cancel}>
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link
-            disabled={editingKey !== ""}
-            onClick={() => edit(record)}>
-            Edit
-          </Typography.Link>
+      key: "5",
+      title: "Action",
+      render: (record) => {
+        return (
+          <>
+            <EditOutlined
+              onClick={() => {
+                onEditEmployee(record);
+              }}
+            />
+            <DeleteOutlined
+              onClick={() => {
+                onDeleteEmployee(record);
+              }}
+              style={{ color: "red", marginLeft: 12 }}
+            />
+          </>
         );
       },
     },
   ];
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
 
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === "age" ? "number" : "text",
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
+  const onAddAdmin = () => {
+    const randomNumber = parseInt(Math.random() * 1000);
+    const newAdmin = {
+      id: randomNumber,
+      name: "Name" + randomNumber,
+      address: " address" + randomNumber,
+      email: randomNumber + "@gmail.com",
     };
-  });
+
+    setDataSource((pre) => {
+      return [...pre, newAdmin];
+    });
+  };
+
+  const onDeleteEmployee = (record) => {
+    Modal.confirm({
+      title: "Are you sure you want to delete this employee?",
+      okText: "Yes",
+      okType: "danger",
+      onOk: () => {
+        setDataSource((pre) => {
+          return pre.filter((employee) => employee.id !== record.id);
+        });
+      },
+    });
+  };
+
+  const onEditEmployee = (record) => {
+    setIsEditing(true);
+    setEditingEmployee({ ...record });
+  };
+
+  const resetEditing = () => {
+    setIsEditing(false);
+    setEditingEmployee(null);
+  };
+
   return (
-    <Form form={form} component={false}>
-      <Table
-        components={{
-          body: {
-            cell: EditableCell,
-          },
+    <Form component={false}>
+      <Button title='Add new Admin' onClick={onAddAdmin}>
+        Add a new Admin
+      </Button>
+      <Table columns={columns} dataSource={dataSource}></Table>
+      <Modal
+        title='Edit Employee'
+        visible={isEditing}
+        okText='Save'
+        onCancel={() => {
+          resetEditing();
         }}
-        bordered
-        dataSource={data}
-        columns={mergedColumns}
-        rowClassName='editable-row'
-        pagination={{
-          onChange: cancel,
-        }}
-      />
+        onOk={() => {
+          setDataSource((pre) => {
+            return pre.map((employee) => {
+              if (employee.id === editingEmployee.id) {
+                return editingEmployee;
+              } else {
+                return employee;
+              }
+            });
+          });
+          resetEditing();
+        }}>
+        <Input
+          value={editingEmployee?.name}
+          onChange={(e) =>
+            setIsEditing((pre) => {
+              return { ...pre, name: e.target.value };
+            })
+          }
+        />
+        <Input
+          value={editingEmployee?.address}
+          onChange={(e) =>
+            setIsEditing((pre) => {
+              return { ...pre, address: e.target.value };
+            })
+          }
+        />
+        <Input
+          value={editingEmployee?.email}
+          onChange={(e) =>
+            setIsEditing((pre) => {
+              return { ...pre, email: e.target.value };
+            })
+          }
+        />
+      </Modal>
     </Form>
   );
 };
 
-export default App;
+export default AdminView;
